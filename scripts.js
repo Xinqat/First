@@ -1,0 +1,59 @@
+const canvas = document.getElementById('rainCanvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const raindrops = [];
+
+class Raindrop {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.length = Math.random() * 20 + 10;
+        this.speed = Math.random() * 5 + 2;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x, this.y + this.length);
+        ctx.strokeStyle = 'rgba(174,194,224,0.5)';
+        ctx.lineWidth = 1;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+    }
+
+    update() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+            this.y = 0 - this.length;
+            this.x = Math.random() * canvas.width;
+            this.speed = Math.random() * 5 + 2;
+            this.length = Math.random() * 20 + 10;
+        }
+    }
+}
+
+function createRain() {
+    for (let i = 0; i < 100; i++) {
+        raindrops.push(new Raindrop());
+    }
+}
+
+function animateRain() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const drop of raindrops) {
+        drop.draw();
+        drop.update();
+    }
+    requestAnimationFrame(animateRain);
+}
+
+createRain();
+animateRain();
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});Если у вас возникли вопросы или проблемы
